@@ -1,5 +1,8 @@
 FROM python:3.10.6-slim
-LABEL maintainer="Nictiz <info@snomed.nl>"
+
+LABEL maintainer="Jan Philipp Sachs" \
+      email="jan-philipp.sachs@hpi.de" \
+      institution="Hasso Plattner Institute, University of Potsdam, Germany"
 
 RUN pip install --no-cache-dir requests_toolbelt==0.9.1
 
