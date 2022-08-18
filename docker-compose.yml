@@ -1,21 +1,18 @@
 version: '3.9'
 services:
-  # ingest-rf2:
-  #   build: ./ingest
-  #   depends_on:
-  #     - snowstorm
-  #   volumes:
-  #     - ${PATH_TO_RF2_FILES}:/releases:ro
-  #   deploy:
-  #     restart_policy:
-  #       condition: on-failure
-  #   environment:
-  #     - release=${release}
-  #     - rf2_filename=${rf2_filename}
+  ingest-rf2:
+    build: ./ingest
+    depends_on:
+      - snowstorm
+    volumes:
+      - ${PATH_TO_RF2_FILES}:/releases:ro
+    restart: on-failure
+    environment:
+      - release=${release}
+      - rf2_filename=${rf2_filename}
 
   elasticsearch:
     image: elasticsearch:7.17.1
-    container_name: elasticsearch
     environment:
       - node.name=snowstorm
       - cluster.name=snowstorm-cluster
@@ -23,10 +20,6 @@ services:
       - "ES_JAVA_OPTS=-Xms8g -Xmx8g"
     volumes:
       - ${PATH_TO_ELASTIC_DB_STORAGE_LOCATION}:/usr/share/elasticsearch/data
-    # networks:
-    #   elastic:
-    #     aliases:
-    #      - es
     healthcheck:
       test: ["CMD", "curl", "-f", "http://elasticsearch:9200"]
       interval: 1s
@@ -37,18 +30,14 @@ services:
 
   snowstorm:
     image: snomedinternational/snowstorm:7.9.3
-    container_name: snowstorm
     restart: always
     depends_on:
       elasticsearch:
         condition: service_healthy
     entrypoint: java -Xms24g -Xmx24g -jar snowstorm.jar --elasticsearch.urls=http://elasticsearch:9200
     # entrypoint: java -Xms24g -Xmx24g -jar snowstorm.jar --elasticsearch.urls=http://elasticsearch:9200 --snowstorm.rest-api.readonly=true
+    # entrypoint: java -Xms24g -Xmx24g -jar snowstorm.jar --elasticsearch.urls=http://elasticsearch:9200 --codesystem.all.latest-version.allow-future=true --codesystem.all.latest-version.allow-internal-release=true
     # entrypoint: java -Xms24g -Xmx24g -jar snowstorm.jar --elasticsearch.urls=http://elasticsearch:9200 #--delete-indices --import="/data/SnomedCT_InternationalRF2_PRODUCTION_20220228T120000Z.zip"
-    # networks:
-    #   elastic:
-    #     aliases:
-    #      - snowstorm
     ports:
       - 8080:8080
     expose:
@@ -56,19 +45,13 @@ services:
 
   snomedct-browser:
     image: snomedinternational/snomedct-browser:latest
-    container_name: browser
     depends_on:
       - snowstorm
     environment:
-      - API_HOST=http://host.docker.internal:8080/
-    # links:
-    #   - snowstorm:snowstorm
-    # networks:
-    #   - elastic
+      - API_HOST=http://snowstorm:8080/
     ports:
       - 80:80
     restart: always
-
 
 networks:
   elastic:

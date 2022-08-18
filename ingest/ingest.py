@@ -13,7 +13,7 @@ def import_release(branch_path, short_name, file_name, import_type, server_url):
 
     try:
         # Summarize received parameters
-        print("******************* Ingest: *******************\n")
+        print("\n******************* Ingest: *******************") # Changed the position of the newline command for more legible terminal output.
         print("branchPath: {}".format(branch_path))
         print("shortName: {}".format(short_name))
         print("File name: {}".format(file_name))
@@ -81,7 +81,7 @@ def import_release(branch_path, short_name, file_name, import_type, server_url):
         # Response 400 > branch exists
         if response_code == "400":
             print("branchPath [{}] already exists - uploading".format(branch_path))
-            payload = '{ "branchPath": "'+branch_path+'", "createCodeSystemVersion": false, "type": "'+import_type+'" }'
+            payload = '{ "branchPath": "'+branch_path+'", "createCodeSystemVersion": true, "type": "'+import_type+'" }' # Changed 'createCodeSystemVersion' to 'true'.
             headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
             r = requests.post(server_url+'/imports', data=payload, headers=headers)
 
@@ -128,7 +128,8 @@ def import_release(branch_path, short_name, file_name, import_type, server_url):
     except Exception as e:
         print("An error has occurred during the import process.")
         print("Exception: ",e)
-        print("Import file:\t", fileName)
+        print("Import file:\t", file_name) # Changed fileName to file_name.
+        sys.exit(1) # Added this line to let the container containing this script restart on failure (upon loading before the elasticsearch and snowstorm services spinning up).
 
 # Check for a provided filename and codebase
 try:
