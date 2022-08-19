@@ -15,5 +15,5 @@ COPY ingest.py /app/
 ENV release=NULL
 ENV rf2_filename=NULL
 
-CMD ["/bin/bash", "-c", "python ingest.py http://snowstorm:8080 SNAPSHOT \"$rf2_filename\" MAIN $release"]
-#ENTRYPOINT ["python", "ingest.py"]
+# CMD ["/bin/bash", "-c", "python ingest.py http://snowstorm:8080 SNAPSHOT \"$rf2_filename\" MAIN $release"]
+ENTRYPOINT ["python", "ingest.py", "http://snowstorm:8080", "SNAPSHOT", "\"$rf2_filename\"", "MAIN", "$release"]

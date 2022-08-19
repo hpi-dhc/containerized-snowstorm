@@ -69,6 +69,7 @@ Wait for the process to finish.
 *(A few comments):*
 - *Closing the lid of a laptop or, more generally, sending the host machine to sleep might compromise the successful completion of this step.*
 - *Not detaching (would be* `-d` *in the command above) from the terminal output will ensure traceability of the import status, but be prepared for a lot of repeated output from the `elasticsearch` service, especially regarding security features (cf. Notes section below).*
+- *The terminal output of the `ingest-rf2` container periodically shows an* `exited with code 1` *at the beginning. This is intended, as the container needs to 'fail' and restart before both `elasticsearch` and `snowstorm` are up and running. A more elegant way would be to use a `wait-for` script, but the outcome would be the same.*
 
 **4) Shut down the orchestrated containers:**
 
