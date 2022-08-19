@@ -69,7 +69,7 @@ Wait for the process to finish.
 *(A few comments):*
 - *Closing the lid of a laptop or, more generally, sending the host machine to sleep might compromise the successful completion of this step.*
 - *Not detaching (would be* `-d` *in the command above) from the terminal output will ensure traceability of the import status, but be prepared for a lot of repeated output from the `elasticsearch` service, especially regarding security features (cf. Notes section below).*
-- *The terminal output of the `ingest-rf2` container periodically shows an* `exited with code 1` *at the beginning. This is intended, as the container needs to 'fail' and restart before both `elasticsearch` and `snowstorm` are up and running. A more elegant way would be to use a `wait-for` script, but the outcome would be the same.*
+- *The terminal output of the `ingest-rf2` container periodically shows an* `exited with code 1` *at the beginning. This is intended, as this container needs to fail (to restart) before both the `elasticsearch` and `snowstorm` containers are up and running. A more elegant way would be to use a* `wait-for` *script in the `ingest-rf2` container, but the outcome would be the same.*
 
 **4) Shut down the orchestrated containers:**
 
@@ -160,4 +160,4 @@ docker compose down
 Thanks to [Thomas Harris](https://github.com/0teh) for investigating and suggesting how to modify the *`ingest-rf2`* service such that all database content is also visible to the *`snomedct-browser`* service.
 
 
-*(Written by [Jan Philipp Sachs](www.jpsachs.de); updated on August 18, 2022)*
+*(Written by [Jan Philipp Sachs](www.jpsachs.de); updated on August 19, 2022)*
