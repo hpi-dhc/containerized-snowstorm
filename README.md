@@ -64,7 +64,11 @@ docker compose up --build
 
 Building and downloading the images, spinning up the containers and executing the ETL scripts will take a considerable amount of time (50-70 minutes on a non-representative set of regular notebooks).
 
-Wait for the process to finish.
+Wait for the process to finish: The *`ingest-rf2`* container should output an
+```
+**** IMPORT SUCCESS ****
+```
+followed by a section with of the loaded version, and indicate in the last line of the terminal output that it `exited with code 0`
 
 *(A few comments):*
 - *Closing the lid of a laptop or, more generally, sending the host machine to sleep might compromise the successful completion of this step.*
@@ -160,4 +164,4 @@ docker compose down
 Thanks to [Thomas Harris](https://github.com/0teh) for investigating and suggesting how to modify the *`ingest-rf2`* service such that all database content is also visible to the *`snomedct-browser`* service.
 
 
-*(Written by [Jan Philipp Sachs](www.jpsachs.de); updated on August 19, 2022)*
+*(Written by [Jan Philipp Sachs](www.jpsachs.de); updated on August 22, 2022)*

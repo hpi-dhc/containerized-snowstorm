@@ -6,14 +6,19 @@ LABEL maintainer="Jan Philipp Sachs" \
 
 RUN pip install --no-cache-dir requests_toolbelt==0.9.1
 
-# Create a working directory
+RUN groupadd -r leastprivilegedgroup && \
+    useradd -r -s /bin/false -g leastprivilegedgroup leastprivilegeduser
+
 RUN mkdir /releases \
-    && mkdir /app
+    && mkdir /app \
+    && chown -R leastprivilegeduser:leastprivilegedgroup /releases \
+    && chown -R leastprivilegeduser:leastprivilegedgroup /app
 WORKDIR /app
 
 COPY ingest.py /app/
 ENV release=NULL
 ENV rf2_filename=NULL
 
-# CMD ["/bin/bash", "-c", "python ingest.py http://snowstorm:8080 SNAPSHOT \"$rf2_filename\" MAIN $release"]
+USER leastprivilegeduser
+
 ENTRYPOINT ["python", "ingest.py", "http://snowstorm:8080", "SNAPSHOT", "\"$rf2_filename\"", "MAIN", "$release"]

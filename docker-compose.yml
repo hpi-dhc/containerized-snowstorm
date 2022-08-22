@@ -12,7 +12,7 @@ services:
       - rf2_filename=${rf2_filename}
 
   elasticsearch:
-    image: elasticsearch:7.17.1
+    image: elasticsearch:7.17.4
     environment:
       - node.name=snowstorm
       - cluster.name=snowstorm-cluster
